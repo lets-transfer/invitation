@@ -1,0 +1,92 @@
+buildscript {
+	repositories {
+		mavenLocal()
+		mavenCentral()
+		jcenter()
+		maven { url "http://repo.spring.io/plugins-release" }
+		maven { url "http://repo.spring.io/milestone" }
+		maven { url "https://plugins.gradle.org/m2/" }
+	}
+	dependencies {
+		classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.1"
+		classpath "io.spring.gradle:dependency-management-plugin:0.6.1.RELEASE"
+	}
+}
+
+group = 'lets.transfer'
+version = '0.0.1-SNAPSHOT'
+
+apply plugin: 'java'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+apply plugin: 'idea'
+apply plugin: 'war'
+apply from: 'gradle/sonar.gradle'
+
+repositories {
+	mavenLocal()
+	mavenCentral()
+	jcenter()
+	maven { url 'http://repo.spring.io/milestone' }
+	maven { url 'http://repo.spring.io/snapshot' }
+	maven { url 'https://repository.jboss.org/nexus/content/repositories/releases' }
+	maven { url 'https://oss.sonatype.org/content/repositories/releases' }
+	maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+	maven { url 'http://repo.maven.apache.org/maven2' }
+}
+
+
+
+List spring = [
+		"org.springframework:spring-orm:${springVersion}",
+		"org.springframework:spring-webmvc:${springVersion}"
+]
+
+List springData = [
+		"org.springframework.data:spring-data-jpa:${springDataJpaVersion}"
+]
+
+List hibernate = [
+		"org.hibernate:hibernate-core:${hibernateVersion}",
+		"org.hibernate:hibernate-entitymanager:${hibernateVersion}",
+		"org.hibernate:hibernate-validator:${validatorVersion}",
+		"org.hibernate:hibernate-validator-annotation-processor:${validatorVersion}"
+]
+
+List jackson = [
+		"com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}",
+		"com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}",
+		"com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
+]
+
+List spock = [
+		"org.spockframework:spock-core:${spockVersion}",
+		"org.spockframework:spock-spring:${spockVersion}"
+]
+
+dependencies {
+	providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
+	compile spring
+	compile springData
+	compile hibernate
+	compile jackson
+
+	// Thymeleaf
+	compile 'org.thymeleaf:thymeleaf:3.0.3.RELEASE'
+	compile 'org.thymeleaf:thymeleaf-spring4:3.0.3.RELEASE'
+	// Thymeleaf legacymode
+	compile 'net.sourceforge.nekohtml:nekohtml:1.9.22'
+
+	compile "org.codehaus.groovy:groovy-all:${groovyVersion}"
+
+	// lombok
+	compile 'org.projectlombok:lombok:1.16.10'
+
+//	compile "mysql:mysql-connector-java"
+//	compile "com.h2database:h2"
+
+	testCompile "junit:junit"
+	testCompile spock
+}
+
