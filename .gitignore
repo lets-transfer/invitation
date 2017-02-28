@@ -30,6 +30,8 @@ gradle-app.setting
 ### Eclipse
 .setting
 
-
 ### Idea
 .idea
+
+### Docker
+bin/mysql_data
