@@ -5,6 +5,7 @@ run_mysql() {
   docker run \
     --name invitation-mysql \
     -v $cwd/mysql_data:/var/lib/mysql \
+    -v $cwd/mysql_init:/docker-entrypoint-initdb.d \
     -e MYSQL_ALLOW_EMPTY_PASSWORD=1 \
     -p 3306:3306 \
     -d \
