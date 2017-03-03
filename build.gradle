@@ -72,6 +72,10 @@ dependencies {
 	compile hibernate
 	compile jackson
 
+	// Database
+	compile 'com.zaxxer:HikariCP:2.6.0'
+	compile 'mysql:mysql-connector-java:5.1.40'
+
 	// Thymeleaf
 	compile 'org.thymeleaf:thymeleaf:3.0.3.RELEASE'
 	compile 'org.thymeleaf:thymeleaf-spring4:3.0.3.RELEASE'
@@ -82,9 +86,6 @@ dependencies {
 
 	// lombok
 	compile 'org.projectlombok:lombok:1.16.10'
-
-//	compile "mysql:mysql-connector-java"
-//	compile "com.h2database:h2"
 
 	testCompile "junit:junit"
 	testCompile spock

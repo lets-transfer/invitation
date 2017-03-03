@@ -1,6 +1,10 @@
 package lets.transfer.config;
 
+import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+
+import javax.servlet.Filter;
 
 public class InvitationWebApplicationInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 	@Override
@@ -17,4 +21,11 @@ public class InvitationWebApplicationInitializer extends AbstractAnnotationConfi
 	protected String[] getServletMappings() {
 		return new String[] { "/" };
 	}
+
+	@Override
+	protected Filter[] getServletFilters() {
+		return new Filter[] { new HiddenHttpMethodFilter(), new CharacterEncodingFilter("UTF-8", true) };
+	}
+
+
 }

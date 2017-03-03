@@ -47,13 +47,14 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 		SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
 
 		templateResolver.setApplicationContext(this.applicationContext);
-		templateResolver.setPrefix("/WEB-INF/templates/");
+		templateResolver.setPrefix("classpath:/templates/");
 		templateResolver.setSuffix(".html");
 		// HTML is the default value, added here for the sake of clarity.
 		templateResolver.setTemplateMode(TemplateMode.HTML);
 		// Template cache is true by default. Set to false if you want
 		// templates to be automatically updated when modified.
-		templateResolver.setCacheable(true);
+		templateResolver.setCacheable(false);
+		templateResolver.setCharacterEncoding("UTF-8");
 		return templateResolver;
 	}
 
@@ -76,6 +77,7 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 	public ThymeleafViewResolver viewResolver(){
 		ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
 		viewResolver.setTemplateEngine(templateEngine());
+		viewResolver.setCharacterEncoding("UTF-8");
 		return viewResolver;
 	}
 }
