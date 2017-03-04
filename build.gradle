@@ -65,12 +65,25 @@ List spock = [
 		"org.spockframework:spock-spring:${spockVersion}"
 ]
 
+List logging= [
+        "org.slf4j:jcl-over-slf4j:1.7.24",
+		"ch.qos.logback:logback-classic:1.2.1"
+]
+
+configurations {
+	// replaced with jcl-over-slf4j
+	all*.exclude group: 'commons-logging', module: 'commons-logging'
+	// replaced with log4j-over-slf4j
+	all*.exclude group: 'log4j', module: 'log4j'
+}
+
 dependencies {
 	providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
 	compile spring
 	compile springData
 	compile hibernate
 	compile jackson
+	compile logging
 
 	// Database
 	compile 'com.zaxxer:HikariCP:2.6.0'
