@@ -1,16 +1,29 @@
+#FROM podbox/java8
 FROM ubuntu:16.04
-MAINTAINER Foo Bar foo@bar.com
+MAINTAINER ksbang39@gmail.com
 
-RUN apt-get update
-RUN apt-get install -y nginx
-RUN echo "\ndaemon off;" >> /etc/nginx/nginx.conf
-RUN chown -R www-data:www-data /var/lib/nginx
+# configuration
+RUN apt-get update \
+		&& apt-get upgrade -y  \
+		&& apt-get install -y curl unzip
 
-VOLUME ["/data", "/etc/nginx/site-enabled", "/var/log/nginx"]
+#Install JDK8
 
-WORKDIR /etc/nginx
+RUN (curl -L -k -b "oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u92-b14/server-jre-8u92-linux-x64.tar.gz | gunzip -c | tar x) \
+		&& mv /jdk1.8.0_92 /jdk
 
-CMD ["nginx"]
+ENV JAVA_HOME /jdk
+#ENV PATH $PATH:$JAVA_HOME/bin
 
-EXPOSE 80
-EXPOSE 443
+#Install Tomcat8
+
+ENV TOMCAT_VERSION 8.0.41
+
+RUN (curl -L http://www.us.apache.org/dist/tomcat/tomcat-8/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz | gunzip -c | tar x) \
+		&& mv /apache-tomcat-$TOMCAT_VERSION /apache-tomcat \
+		&& rm -fR /apache-tomcat/webapps/*
+
+ENV TOMCAT_HOME /apache-tomcat
+ENV PATH $PATH:$JAVA_HOME/bin:$TOMCAT_HOME/bin
+
+#ENV PATH $PATH:$TOMCAT_HOME/bin
