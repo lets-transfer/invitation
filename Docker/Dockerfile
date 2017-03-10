@@ -1,3 +1,4 @@
+#FROM podbox/java8
 FROM ubuntu:16.04
 MAINTAINER ksbang39@gmail.com
 
