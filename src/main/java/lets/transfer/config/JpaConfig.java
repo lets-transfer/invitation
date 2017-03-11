@@ -17,7 +17,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 @Configuration
-@EnableJpaRepositories(basePackages = "lets.transfer.domain")
+@EnableJpaRepositories(basePackages = {"lets.transfer.domain", "lets.transfer.invitation"})
 @EnableTransactionManagement
 public class JpaConfig {
 	@Bean
