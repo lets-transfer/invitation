@@ -35,7 +35,7 @@ public class TemplateListController {
 		return "templatelist/insertEdit";
 	}
 
-	@RequestMapping(value = "", method = RequestMethod.POST)
+	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public String saveSample(@ModelAttribute TemplateList templateList, RedirectAttributes redirectAttributes) {
 		redirectAttributes.addFlashAttribute("result", "saved");
 		templateListService.save(templateList);
