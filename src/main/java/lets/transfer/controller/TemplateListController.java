@@ -39,6 +39,6 @@ public class TemplateListController {
 	public String saveSample(@ModelAttribute TemplateList templateList, RedirectAttributes redirectAttributes) {
 		redirectAttributes.addFlashAttribute("result", "saved");
 		templateListService.save(templateList);
-		return "templatelist/list";
+		return "redirect:/templatelist/list";
 	}
 }
