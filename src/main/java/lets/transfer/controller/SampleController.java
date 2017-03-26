@@ -25,7 +25,7 @@ public class SampleController {
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public String viewIndex(Model model) {
 		model.addAttribute("samples",sampleService.list());
-		return "sample/index";
+		return "sample/index2";
 	}
 
 	@RequestMapping(value ="/{id}", method = RequestMethod.GET)
