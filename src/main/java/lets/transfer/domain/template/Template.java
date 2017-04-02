@@ -1,4 +1,4 @@
-package lets.transfer.domain.templateList;
+package lets.transfer.domain.template;
 
 import lombok.Data;
 
@@ -8,9 +8,12 @@ import javax.persistence.Id;
 
 @Entity
 @Data
-public class TemplateList {
+public class Template {
 	@Id @GeneratedValue
 	private long id;
 	private String name;
-	private String value;
+	private String explain;
+	private String filepath;
+	private String owner;
+	//private Date date;
 }

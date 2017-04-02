@@ -29,17 +29,25 @@
 
 <table class="table">
   <tr>
-    <th>NAME</th>
-    <th>Value</th>
-    <th>Edit</th>
-    <th>Delete</th>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Explain</th>
+    <th>FilePath</th>
+    <th>Owner</th>
+    <th>Date</th>
   </tr>
+
   <!--/*@thymesVar id="templates" type="java.util.List" */-->
   <tr th:each="template : ${templates}">
-    <!--/*@thymesVar id="template" type="lets.transfer.domain.templateList.TemplateList"*/-->
+    <!--/*@thymesVar id="template" type="lets.transfer.domain.template.Template"*/-->
+    <td th:text="${template.id}">id</td>
     <td th:text="${template.name}">name</td>
-    <td th:text="${template.value}">value</td>
-    <td><a href="../templatelist/insertEdit.html" th:href="@{'/sample/'+${template.id}}">Edit</a> </td>
+    <td th:text="${template.explain}">explain</td>
+    <td th:text="${template.filepath}">filepath</td>
+    <td th:text="${template.owner}">owner</td>
+    <!-- <td th:text="${template.date}">date</td> -->
+
+    <td><a href="../template/insertEdit.html" th:href="@{'/sample/'+${template.id}}">Edit</a> </td>
     <td>
       <form  th:action="@{'/template/'+${template.id}}"  method="post">
         <button class="btn btn-danger" type="submit">Delete</button>
@@ -50,7 +58,7 @@
 </table>
 
 <a class="btn btn-default" href="../sample/index.html" th:href="@{/sample}">Index</a>
-<a class="btn btn-default" href="../templatelist/insertEdit.html" th:href="@{/templatelist/new}">New</a>
+<a class="btn btn-default" href="../template/insertEdit.html" th:href="@{/template/new}">New</a>
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
