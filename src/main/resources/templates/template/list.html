@@ -29,16 +29,24 @@
 
 <table class="table">
   <tr>
-    <th>NAME</th>
-    <th>Value</th>
-    <th>Edit</th>
-    <th>Delete</th>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Explain</th>
+    <th>FilePath</th>
+    <th>Owner</th>
+    <th>Date</th>
   </tr>
+
   <!--/*@thymesVar id="templates" type="java.util.List" */-->
   <tr th:each="template : ${templates}">
     <!--/*@thymesVar id="template" type="lets.transfer.domain.template.Template"*/-->
+    <td th:text="${template.id}">id</td>
     <td th:text="${template.name}">name</td>
-    <td th:text="${template.value}">value</td>
+    <td th:text="${template.explain}">explain</td>
+    <td th:text="${template.filepath}">filepath</td>
+    <td th:text="${template.owner}">owner</td>
+    <!-- <td th:text="${template.date}">date</td> -->
+
     <td><a href="../template/insertEdit.html" th:href="@{'/sample/'+${template.id}}">Edit</a> </td>
     <td>
       <form  th:action="@{'/template/'+${template.id}}"  method="post">
