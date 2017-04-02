@@ -7,10 +7,13 @@ Base logback configuration provided for compatibility with Spring Boot 1.1
 <included>
   <include resource="logger/defaults.xml" />
   <property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/invitation.log}"/>
-  <include resource="logger/console-appender.xml" />
-  <include resource="loggerk/file-appender.xml" />
-  <root level="INFO">
+  <include resource="logger/console.xml" />
+  <include resource="logger/file-appender.xml" />
+
+  <root level="DEBUG">
     <appender-ref ref="CONSOLE" />
     <appender-ref ref="FILE" />
   </root>
+
+
 </included>
