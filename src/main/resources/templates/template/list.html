@@ -31,7 +31,7 @@
   <tr>
     <th>ID</th>
     <th>Name</th>
-    <th>Explain</th>
+    <th>Desc</th>
     <th>FilePath</th>
     <th>Owner</th>
     <th>Date</th>
@@ -40,14 +40,14 @@
   <!--/*@thymesVar id="templates" type="java.util.List" */-->
   <tr th:each="template : ${templates}">
     <!--/*@thymesVar id="template" type="lets.transfer.domain.template.Template"*/-->
-    <td th:text="${template.id}">id</td>
-    <td th:text="${template.name}">name</td>
-    <td th:text="${template.explain}">explain</td>
-    <td th:text="${template.filepath}">filepath</td>
-    <td th:text="${template.owner}">owner</td>
-    <!-- <td th:text="${template.date}">date</td> -->
+    <td th:text="${template.id}">ID</td>
+    <td th:text="${template.name}">Name</td>
+    <td th:text="${template.description}">Desc</td>
+    <td th:text="${template.filePath}">filePath</td>
+    <td th:text="${template.owner}">Owner</td>
+    <td th:text="${template.date}">Date</td>
 
-    <td><a href="../template/insertEdit.html" th:href="@{'/sample/'+${template.id}}">Edit</a> </td>
+    <td><a href="../template/insertEdit.html" th:href="@{'/template/'+${template.id}}">Edit</a> </td>
     <td>
       <form  th:action="@{'/template/'+${template.id}}"  method="post">
         <button class="btn btn-danger" type="submit">Delete</button>
