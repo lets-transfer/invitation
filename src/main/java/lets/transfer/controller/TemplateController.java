@@ -31,29 +31,28 @@ public class TemplateController {
 	}
 
 	@RequestMapping(value ="/new", method = RequestMethod.GET)
-	public String newSample(Model model) {
+	public String newTemplate(Model model) {
 		model.addAttribute("template", new Template());
 		return "template/insertEdit";
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.POST)
-	public String saveSample(@ModelAttribute Template template, RedirectAttributes redirectAttributes) {
+	public String saveTemplate(@ModelAttribute Template template, RedirectAttributes redirectAttributes) {
 		redirectAttributes.addFlashAttribute("result", "saved");
 		templateService.save(template);
 		return "redirect:/template/list";
 	}
 
 	@RequestMapping(value ="/{id}", method = RequestMethod.GET)
-	public String editSample(@PathVariable long id, Model model) {
+	public String editTemplate(@PathVariable long id, Model model) {
 		model.addAttribute("template", templateService.get(id));
 		return "template/insertEdit";
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public String deleteSample(@PathVariable long id, RedirectAttributes redirectAttributes) {
+	public String deleteTemplate(@PathVariable long id, RedirectAttributes redirectAttributes) {
 		redirectAttributes.addFlashAttribute("result", "Deleted");
 		templateService.remove(id);
-		
 		return "redirect:/template/list";
 	}
 }
