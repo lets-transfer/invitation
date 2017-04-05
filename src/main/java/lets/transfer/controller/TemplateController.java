@@ -53,6 +53,7 @@ public class TemplateController {
 	public String deleteSample(@PathVariable long id, RedirectAttributes redirectAttributes) {
 		redirectAttributes.addFlashAttribute("result", "Deleted");
 		templateService.remove(id);
+		
 		return "redirect:/template/list";
 	}
 }
