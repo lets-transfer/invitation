@@ -36,7 +36,7 @@
   </tr>
   <!--/*@thymesVar id="templates" type="java.util.List" */-->
   <tr th:each="template : ${templates}">
-    <!--/*@thymesVar id="template" type="lets.transfer.domain.templateList.TemplateList"*/-->
+    <!--/*@thymesVar id="template" type="lets.transfer.domain.template.Template"*/-->
     <td th:text="${template.name}">name</td>
     <td th:text="${template.value}">value</td>
     <td><a href="../templatelist/insertEdit.html" th:href="@{'/sample/'+${template.id}}">Edit</a> </td>
@@ -50,7 +50,7 @@
 </table>
 
 <a class="btn btn-default" href="../sample/index.html" th:href="@{/sample}">Index</a>
-<a class="btn btn-default" href="../templatelist/insertEdit.html" th:href="@{/templatelist/new}">New</a>
+<!--<a class="btn btn-default" href="../templatelist/insertEdit.html" th:href="@{/templatelist/new}">New</a>-->
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

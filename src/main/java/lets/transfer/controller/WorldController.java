@@ -5,9 +5,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class HelloController {
-	@RequestMapping("hello")
-	public String hello(Model model) {
-		return "helloWorld/hello/hello";
-	}
+public class WorldController {
+    @RequestMapping("world")
+    public String world(Model model) {
+        return "helloWorld/world/world";
+    }
 }
