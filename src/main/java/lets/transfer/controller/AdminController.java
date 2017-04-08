@@ -2,6 +2,7 @@ package lets.transfer.controller;
 
 import lets.transfer.domain.sample.Sample;
 import lets.transfer.domain.sample.SampleService;
+import lets.transfer.domain.template.Template;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,28 +24,27 @@ public class AdminController {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String viewIndex(Model model) {
-        model.addAttribute("samples",sampleService.list());
-        return "template/adminList";
-    }
+		model.addAttribute("samples",sampleService.list());
+		return "admin/list";
+	}
 
     @RequestMapping(value ="/{id}", method = RequestMethod.GET)
 	public String editSample(@PathVariable long id, Model model) {
 		model.addAttribute("sample", sampleService.get(id));
-		return "template/insertEdit";
+		return "admin/insertEdit";
 	}
 
 	@RequestMapping(value ="/new", method = RequestMethod.GET)
 	public String newSample(Model model) {
-		model.addAttribute("sample", new Sample());
-//		return "sample/insertEdit";
-        return "template/insertEdit";
+		model.addAttribute("template", new Template());
+        return "admin/insertEdit";
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public String saveSample(@ModelAttribute Sample sample, RedirectAttributes redirectAttributes) {
 		redirectAttributes.addFlashAttribute("result", "saved");
 		sampleService.save(sample);
-		return "redirect:/sample";
+		return "redirect:/admin/";
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)

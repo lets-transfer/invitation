@@ -10,9 +10,4 @@ public class HelloController {
 	public String hello(Model model) {
 		return "hello";
 	}
-
-	@RequestMapping("/world")
-	public String world(Model model) {
-		return "hello";
-	}
 }
