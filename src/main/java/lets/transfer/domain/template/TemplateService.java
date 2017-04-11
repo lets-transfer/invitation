@@ -4,6 +4,7 @@ import lets.transfer.domain.sample.Sample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.util.List;
@@ -34,7 +35,10 @@ public class TemplateService {
 		templateRepository.delete(id);
 	}
 
-	public void upload(File f, long id) {
+	public void upload(MultipartFile f) {
+
+		String fName = f.getName();
+
 		//templateRepository.upload(id);
 	}
 }

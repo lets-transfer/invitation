@@ -1,20 +1,14 @@
 package lets.transfer.controller;
 
-import lets.transfer.domain.sample.Sample;
 import lets.transfer.domain.template.Template;
 import lets.transfer.domain.template.TemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.annotation.processing.FilerException;
-import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -77,20 +71,21 @@ public class TemplateController {
 	}
 
 	@PostMapping("/template")
-	public String templateUpload(@RequestParam("datafile") MultipartFile file){
+	public String templateUpload(@RequestParam("datafile") MultipartFile file) {
 
-		if(!file.isEmpty()){
-			System.out.print("[ksk] templatedUpload entered1");
-			try{
-				System.out.print("[ksk] templatedUpload entered2");
+		if (!file.isEmpty()) {
+
+			try {
 				byte[] bytes = file.getBytes();
+				templateService.upload(file);
+
 				return "redirect:/template";
 
-			}catch (IOException e){
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 
-		return "redirect:uploadFail";
+		return "redirect:/template/failPage";
 	}
 }
