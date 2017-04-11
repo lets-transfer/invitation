@@ -7,16 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.annotation.processing.FilerException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -52,7 +51,7 @@ public class TemplateController {
 		SimpleDateFormat sdf;
 
 		try{
-			sdf = new SimpleDateFormat("yyyy/MM/dd/hh:mm:ss");
+			sdf = new SimpleDateFormat("yyyy-MM-dd");
 			String date_s = sdf.format(current);
 			Date date = sdf.parse(date_s);
 			template.setDate(date);
@@ -77,14 +76,21 @@ public class TemplateController {
 		return "redirect:/template";
 	}
 
-	@RequestMapping(value="upload", method = RequestMethod.POST)
-	public String templateUpload(@PathVariable long id, Model model, MultipartHttpServletRequest request){
+	@PostMapping("/template")
+	public String templateUpload(@RequestParam("datafile") MultipartFile file){
 
-		String fileName = request.getPathInfo();
-		String path = request.getContextPath();
-		File f = new File(path+"/"+fileName);
-		templateService.upload(f,id);
+		if(!file.isEmpty()){
+			System.out.print("[ksk] templatedUpload entered1");
+			try{
+				System.out.print("[ksk] templatedUpload entered2");
+				byte[] bytes = file.getBytes();
+				return "redirect:/template";
 
-		return "template/list";
+			}catch (IOException e){
+				e.printStackTrace();
+			}
+		}
+
+		return "redirect:uploadFail";
 	}
 }
