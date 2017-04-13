@@ -70,8 +70,8 @@ public class TemplateController {
 		return "redirect:/template";
 	}
 
-	@PostMapping("/template")
-	public String templateUpload(@RequestParam("datafile") MultipartFile file) {
+	@RequestMapping(value="/template", method=RequestMethod.POST)
+	public String templateUpload(@RequestPart("meta-data") MultipartFile file) {
 
 		if (!file.isEmpty()) {
 
