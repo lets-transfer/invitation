@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,75 +19,87 @@ import java.util.Date;
 @Controller
 @RequestMapping("/template")
 public class TemplateController {
-	private final TemplateService templateService;
+    private final TemplateService templateService;
 
 
-	@Autowired
-	public TemplateController(TemplateService templateService) {
+    @Autowired
+    public TemplateController(TemplateService templateService) {
 
-		this.templateService = templateService;
-	}
+        this.templateService = templateService;
+    }
 
-	@RequestMapping("")
-	public String viewIndex(Model model) {
-		model.addAttribute("templates", templateService.list());
-		return "template/list";
-	}
+    @RequestMapping("")
+    public String viewIndex(Model model) {
+        model.addAttribute("templates", templateService.list());
+        return "template/list";
+    }
 
-	@RequestMapping(value ="/new", method = RequestMethod.GET)
-	public String newTemplate(Model model) {
-		model.addAttribute("template", new Template());
-		return "template/insertEdit";
-	}
+    @RequestMapping(value = "/new", method = RequestMethod.GET)
+    public String newTemplate(Model model) {
+        model.addAttribute("template", new Template());
+        return "template/insertEdit";
+    }
 
-	@RequestMapping(value = "", method = RequestMethod.POST)
-	public String saveTemplate(@ModelAttribute Template template, RedirectAttributes redirectAttributes) {
-		redirectAttributes.addFlashAttribute("result", "saved");
-		Date current = new Date();
-		SimpleDateFormat sdf;
+    @RequestMapping(value = "", method = RequestMethod.POST)
+    public String saveTemplate(@ModelAttribute Template template, RedirectAttributes redirectAttributes, @RequestParam("datafile") MultipartFile file) {
+        redirectAttributes.addFlashAttribute("result", "saved");
+        Date current = new Date();
+        SimpleDateFormat sdf;
 
-		try{
-			sdf = new SimpleDateFormat("yyyy-MM-dd");
-			String date_s = sdf.format(current);
-			Date date = sdf.parse(date_s);
-			template.setDate(date);
-		}catch (ParseException e){
-			e.printStackTrace();
-		}
+        try{
+            InputStream inputstream = file.getInputStream();
+            inputstream.read();
+        } catch (Exception e) {
 
-		templateService.save(template);
-		return "redirect:/template";
-	}
+        }
 
-	@RequestMapping(value ="/{id}", method = RequestMethod.GET)
-	public String editTemplate(@PathVariable long id, Model model) {
-		model.addAttribute("template", templateService.get(id));
-		return "template/insertEdit";
-	}
+        try {
+            sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String date_s = sdf.format(current);
+            Date date = sdf.parse(date_s);
+            template.setDate(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public String deleteTemplate(@PathVariable long id, RedirectAttributes redirectAttributes) {
-		redirectAttributes.addFlashAttribute("result", "Deleted");
-		templateService.remove(id);
-		return "redirect:/template";
-	}
+        templateService.save(template);
+        return "redirect:/template";
+    }
 
-	@RequestMapping(value="/template", method=RequestMethod.POST)
-	public String templateUpload(@RequestPart("meta-data") MultipartFile file) {
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public String editTemplate(@PathVariable long id, Model model) {
+        model.addAttribute("template", templateService.get(id));
+        return "template/insertEdit";
+    }
 
-		if (!file.isEmpty()) {
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public String deleteTemplate(@PathVariable long id, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("result", "Deleted");
+        templateService.remove(id);
+        return "redirect:/template";
+    }
 
-			try {
-				byte[] bytes = file.getBytes();
-				templateService.upload(file);
+    /*@RequestMapping(value = "/template", method = RequestMethod.POST)
+    public String templateUpload(@RequestPart("meta-data") MultipartFile file) {
 
-				return "redirect:/template";
+        String fileName;
+        File saveFile = null;
 
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+        if (!file.isEmpty()) {
 
-		return "redirect:/template/failPage";
-	}
+            try {
+                //byte[] bytes = file.getBytes();
+                fileName = file.getOriginalFilename();
+
+                saveFile.getParentFile().mkdir();
+
+                return "redirect:/template";
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return "redirect:/template/failPage";
+    }*/
 }
