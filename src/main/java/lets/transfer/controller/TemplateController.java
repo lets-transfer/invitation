@@ -40,7 +40,7 @@ public class TemplateController {
         return "template/insertEdit";
     }
 
-    @RequestMapping(value = "", method = RequestMethod.POST)
+    @RequestMapping(value = "/form", method = RequestMethod.POST)
     public String saveTemplate(@ModelAttribute Template template, RedirectAttributes redirectAttributes, @RequestParam("datafile") MultipartFile file) {
         redirectAttributes.addFlashAttribute("result", "saved");
         Date current = new Date();
@@ -50,7 +50,7 @@ public class TemplateController {
             InputStream inputstream = file.getInputStream();
             inputstream.read();
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
 
         try {
