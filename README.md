@@ -6,6 +6,12 @@
 MySQL을 Docker로 이용해서 기동하고 있으므로 Docker가 필요합니다.  
 https://www.docker.com/products/docker#/mac 여기를 참고하셔서 설치하시길 바랍니다
 
+docker run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true --name invitation-mysql mysql
+docker exec -it invitation-mysql /bin/bash
+mysql -uroot
+create database invitation
+show databases;
+
 - JDK 1.8
 
 ### IntelliJ 환경 구성하기
