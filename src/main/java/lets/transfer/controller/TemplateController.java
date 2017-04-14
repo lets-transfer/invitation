@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -41,16 +41,24 @@ public class TemplateController {
     }
 
     @RequestMapping(value = "/form", method = RequestMethod.POST)
-    public String saveTemplate(@ModelAttribute Template template, RedirectAttributes redirectAttributes, @RequestParam("datafile") MultipartFile file) {
+    public String saveTemplate(@ModelAttribute Template template, RedirectAttributes redirectAttributes, @RequestParam("file") MultipartFile file) {
         redirectAttributes.addFlashAttribute("result", "saved");
         Date current = new Date();
         SimpleDateFormat sdf;
+        byte[] bytes;
+        String UPLOAD_PATH = null;
 
-        try{
-            InputStream inputstream = file.getInputStream();
-            inputstream.read();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(file.isEmpty()){
+            return "redirect:/template/failPage";
+        }else{
+            try{
+                bytes = file.getBytes();
+                Path path = Paths.get(UPLOAD_PATH + file.getOriginalFilename());
+                Files.write(path,bytes);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         try {
@@ -77,6 +85,11 @@ public class TemplateController {
         redirectAttributes.addFlashAttribute("result", "Deleted");
         templateService.remove(id);
         return "redirect:/template";
+    }
+
+    @RequestMapping(value = "/failPage", method = RequestMethod.GET)
+    public String failTemplate(@PathVariable long id, Model model){
+        return "template/failPage";
     }
 
     /*@RequestMapping(value = "/template", method = RequestMethod.POST)
