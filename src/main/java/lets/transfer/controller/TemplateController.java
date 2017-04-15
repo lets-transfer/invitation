@@ -43,8 +43,6 @@ public class TemplateController {
     @RequestMapping(value = "/form", method = RequestMethod.POST)
     public String saveTemplate(@ModelAttribute Template template, RedirectAttributes redirectAttributes, @RequestParam(value = "file",required=false) MultipartFile file) {
         redirectAttributes.addFlashAttribute("result", "saved");
-        Date current = new Date();
-        SimpleDateFormat sdf;
         byte[] bytes;
         String UPLOAD_PATH = null;
 
@@ -61,17 +59,14 @@ public class TemplateController {
             return "template/failPage";
         }
 
-        try {
-            sdf = new SimpleDateFormat("yyyy-MM-dd");
-            String date_s = sdf.format(current);
-            Date date = sdf.parse(date_s);
-            template.setDate(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        template.setDate(calDate());
 
         templateService.save(template);
         return "redirect:/template";
+    }
+
+    public Date calDate(){
+        return new Date();
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
