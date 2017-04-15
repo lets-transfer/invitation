@@ -85,8 +85,8 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 	}
 
 	//Regi Multipart Resolver - start
-	@Bean
-	public MultipartResolver fileResolver(){
+	@Bean(name = "multipartResolver")
+	public MultipartResolver multipartResolver(){
 
 		return new StandardServletMultipartResolver();
 	}

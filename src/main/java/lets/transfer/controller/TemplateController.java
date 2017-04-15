@@ -41,16 +41,14 @@ public class TemplateController {
     }
 
     @RequestMapping(value = "/form", method = RequestMethod.POST)
-    public String saveTemplate(@ModelAttribute Template template, RedirectAttributes redirectAttributes, @RequestParam("file") MultipartFile file) {
+    public String saveTemplate(@ModelAttribute Template template, RedirectAttributes redirectAttributes, @RequestParam(value = "file",required=false) MultipartFile file) {
         redirectAttributes.addFlashAttribute("result", "saved");
         Date current = new Date();
         SimpleDateFormat sdf;
         byte[] bytes;
         String UPLOAD_PATH = null;
 
-        if(file.isEmpty()){
-            return "redirect:/template/failPage";
-        }else{
+        if(file != null){
             try{
                 bytes = file.getBytes();
                 Path path = Paths.get(UPLOAD_PATH + file.getOriginalFilename());
@@ -59,6 +57,8 @@ public class TemplateController {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }else{
+            return "template/failPage";
         }
 
         try {
