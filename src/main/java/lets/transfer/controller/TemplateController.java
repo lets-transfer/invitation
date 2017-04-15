@@ -12,8 +12,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Controller
@@ -41,7 +39,10 @@ public class TemplateController {
     }
 
     @RequestMapping(value = "/form", method = RequestMethod.POST)
-    public String saveTemplate(@ModelAttribute Template template, RedirectAttributes redirectAttributes, @RequestParam(value = "file",required=false) MultipartFile file) {
+    public String saveTemplate(@ModelAttribute Template template,
+                               RedirectAttributes redirectAttributes,
+                               @RequestParam(value = "file",required=false) MultipartFile file) {
+
         redirectAttributes.addFlashAttribute("result", "saved");
         byte[] bytes;
         String UPLOAD_PATH = "/WEB-INF/resources/";
@@ -56,6 +57,7 @@ public class TemplateController {
                 e.printStackTrace();
             }
         }else{
+
             return "template/failPage";
         }
 
