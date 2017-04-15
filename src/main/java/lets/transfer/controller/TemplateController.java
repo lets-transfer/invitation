@@ -44,7 +44,7 @@ public class TemplateController {
     public String saveTemplate(@ModelAttribute Template template, RedirectAttributes redirectAttributes, @RequestParam(value = "file",required=false) MultipartFile file) {
         redirectAttributes.addFlashAttribute("result", "saved");
         byte[] bytes;
-        String UPLOAD_PATH = null;
+        String UPLOAD_PATH = "/WEB-INF/resources/";
 
         if(file != null){
             try{
