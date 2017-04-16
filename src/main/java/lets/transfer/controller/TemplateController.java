@@ -12,8 +12,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Controller
@@ -41,16 +39,15 @@ public class TemplateController {
     }
 
     @RequestMapping(value = "/form", method = RequestMethod.POST)
-    public String saveTemplate(@ModelAttribute Template template, RedirectAttributes redirectAttributes, @RequestParam("file") MultipartFile file) {
-        redirectAttributes.addFlashAttribute("result", "saved");
-        Date current = new Date();
-        SimpleDateFormat sdf;
-        byte[] bytes;
-        String UPLOAD_PATH = null;
+    public String saveTemplate(@ModelAttribute Template template,
+                               RedirectAttributes redirectAttributes,
+                               @RequestParam(value = "file",required=false) MultipartFile file) {
 
-        if(file.isEmpty()){
-            return "redirect:/template/failPage";
-        }else{
+        redirectAttributes.addFlashAttribute("result", "saved");
+        byte[] bytes;
+        String UPLOAD_PATH = "/WEB-INF/resources/";
+
+        if(file != null){
             try{
                 bytes = file.getBytes();
                 Path path = Paths.get(UPLOAD_PATH + file.getOriginalFilename());
@@ -59,19 +56,19 @@ public class TemplateController {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }else{
+
+            return "template/failPage";
         }
 
-        try {
-            sdf = new SimpleDateFormat("yyyy-MM-dd");
-            String date_s = sdf.format(current);
-            Date date = sdf.parse(date_s);
-            template.setDate(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        template.setDate(calDate());
 
         templateService.save(template);
         return "redirect:/template";
+    }
+
+    public Date calDate(){
+        return new Date();
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)

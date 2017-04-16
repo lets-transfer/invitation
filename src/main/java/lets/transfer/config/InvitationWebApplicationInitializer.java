@@ -5,8 +5,15 @@ import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import javax.servlet.Filter;
+import javax.servlet.MultipartConfigElement;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
+import java.io.File;
 
 public class InvitationWebApplicationInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+	private int maxUploadSizeInMb = 5 * 1024 * 1024; // 5 MB
+
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
 		return null;
@@ -27,5 +34,14 @@ public class InvitationWebApplicationInitializer extends AbstractAnnotationConfi
 		return new Filter[] { new HiddenHttpMethodFilter(), new CharacterEncodingFilter("UTF-8", true) };
 	}
 
+	@Override
+	protected void customizeRegistration(ServletRegistration.Dynamic registration) {
+		File uploadDirectory = new File("/Users/spoon/temp/");
 
+		MultipartConfigElement multipartConfigElement =
+				new MultipartConfigElement(uploadDirectory.getAbsolutePath(),
+						maxUploadSizeInMb, maxUploadSizeInMb * 2, maxUploadSizeInMb / 2);
+
+		registration.setMultipartConfig(multipartConfigElement);
+	}
 }

@@ -7,8 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
-import org.springframework.web.multipart.MultipartResolver;
-import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -84,11 +83,11 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 		return viewResolver;
 	}
 
-	//Regi Multipart Resolver - start
+	//Reg Multipart Resolver - start
 	@Bean
-	public MultipartResolver fileResolver(){
+	public StandardServletMultipartResolver fileResolver(){
 
 		return new StandardServletMultipartResolver();
 	}
-	//Regi Multipart Resolver - end
+	//Reg Multipart Resolver - end
 }
