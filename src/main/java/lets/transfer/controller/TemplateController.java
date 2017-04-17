@@ -42,50 +42,51 @@ public class TemplateController {
     @RequestMapping(value = "/form", method = RequestMethod.POST)
     public String saveTemplate(@ModelAttribute Template template,
                                RedirectAttributes redirectAttributes,
-                               @RequestParam(value = "file",required=false) MultipartFile file) {
+                               @RequestParam(value = "file", required = false) MultipartFile file) {
 
         redirectAttributes.addFlashAttribute("result", "saved");
         byte[] bytes;
-        boolean isSuccess = false ;
+        boolean isSuccess = false;
 
         String user = null;
         user = System.getProperty("user.home");
-        String UPLOAD_PATH = user+"/uploadTemplate/";
+        String UPLOAD_PATH = user + "/uploadTemplate/";
 
-        if(file != null){
-            try{
-                log.debug("[ksk] user path {} ", user);
+        log.debug("[ksk] user path {} ", user);
+
+        if (file != null) {
+            try {
 
                 log.debug("[ksk] file write-start");
                 bytes = file.getBytes();
 
                 Path path = Paths.get(UPLOAD_PATH + file.getOriginalFilename());
-                log.debug("[ksk] path: {} ",path);
+                log.debug("[ksk] path: {} ", path);
 
                 File dir = new File(UPLOAD_PATH);
 
-                if(!dir.exists()){
+                if (!dir.exists()) {
                     dir.mkdir();
-                    path = Paths.get(dir.toString()+ "/"+file.getOriginalFilename());
+                    path = Paths.get(dir.toString() + "/" + file.getOriginalFilename());
                     log.debug("[ksk] dir Create Complete: {}", path);
 
-                    isSuccess = fileWrite(path,bytes);
+                    isSuccess = fileWrite(path, bytes);
 
-                }else{
-                    isSuccess = fileWrite(path,bytes);
+                } else {
+                    isSuccess = fileWrite(path, bytes);
                 }
 
+                returnFailPage(isSuccess);
                 log.debug("[ksk] file write-end");
 
             } catch (Exception e) {
                 isSuccess = false;
                 e.printStackTrace();
 
-                return "template/failPage";
+                returnFailPage(isSuccess);
             }
-        }else{
-
-            return "template/failPage";
+        } else {
+            returnFailPage(isSuccess);
         }
 
         log.debug("[ksk] file Status: {}", isSuccess);
@@ -96,24 +97,33 @@ public class TemplateController {
         return "redirect:/template";
     }
 
-    private boolean fileWrite(Path path, byte[] bytes) throws Exception{
+    private String returnFailPage(boolean flag) {
+        return "template/failPage";
+    }
+
+    private boolean fileWrite(Path path, byte[] bytes) throws Exception {
 
         File uploadFile = new File(path.toString());
         boolean isSuccess = false;
 
-        BufferedOutputStream bo = new BufferedOutputStream(new FileOutputStream(uploadFile));
+        if (uploadFile != null) {
 
-        bo.write(bytes);
-        bo.close();
-        isSuccess = true;
+            BufferedOutputStream bo = new BufferedOutputStream(new FileOutputStream(uploadFile));
 
-        log.debug("[ksk] file write complete");
+            bo.write(bytes);
+            bo.close();
 
-        return isSuccess;
+            log.debug("[ksk] file write complete");
+            return true;
+
+        } else {
+            return false;
+        }
+
     }
 
 
-    private Date getCurrentDate(){
+    private Date getCurrentDate() {
         return new Date();
     }
 
@@ -131,7 +141,7 @@ public class TemplateController {
     }
 
     @RequestMapping(value = "/failPage", method = RequestMethod.GET)
-    public String failTemplate(@PathVariable long id, Model model){
+    public String failTemplate(@PathVariable long id, Model model) {
         return "template/failPage";
     }
 
