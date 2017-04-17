@@ -95,12 +95,13 @@ public class TemplateController {
         template.setDate(getCurrentDate());
         template.setFilePath(UPLOAD_PATH);
 
-        templateService.save(template);
+        saveTemplate(template);
+
         return "redirect:/template";
     }
 
     private void saveTemplate(Template template) {
-
+        templateService.save(template);
     }
 
     private String returnFailPage() {
