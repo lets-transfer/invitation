@@ -6,8 +6,6 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 
 import javax.servlet.Filter;
 import javax.servlet.MultipartConfigElement;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 import java.io.File;
 
@@ -36,7 +34,10 @@ public class InvitationWebApplicationInitializer extends AbstractAnnotationConfi
 
 	@Override
 	protected void customizeRegistration(ServletRegistration.Dynamic registration) {
-		File uploadDirectory = new File("/Users/spoon/temp/");
+		String user = null;
+		user = System.getProperty("user.home");
+
+		File uploadDirectory = new File(user+"/files");
 
 		MultipartConfigElement multipartConfigElement =
 				new MultipartConfigElement(uploadDirectory.getAbsolutePath(),

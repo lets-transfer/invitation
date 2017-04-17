@@ -2,6 +2,7 @@ package lets.transfer.controller;
 
 import lets.transfer.domain.template.Template;
 import lets.transfer.domain.template.TemplateService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,16 +10,16 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.nio.file.Files;
+import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
 
+@Slf4j
 @Controller
 @RequestMapping("/template")
 public class TemplateController {
     private final TemplateService templateService;
-
 
     @Autowired
     public TemplateController(TemplateService templateService) {
@@ -45,29 +46,74 @@ public class TemplateController {
 
         redirectAttributes.addFlashAttribute("result", "saved");
         byte[] bytes;
-        String UPLOAD_PATH = "/WEB-INF/resources/";
+        boolean isSuccess = false ;
+
+        String user = null;
+        user = System.getProperty("user.home");
+        String UPLOAD_PATH = user+"/uploadTemplate/";
 
         if(file != null){
             try{
+                log.debug("[ksk] user path {} ", user);
+
+                log.debug("[ksk] file write-start");
                 bytes = file.getBytes();
+
                 Path path = Paths.get(UPLOAD_PATH + file.getOriginalFilename());
-                Files.write(path,bytes);
+                log.debug("[ksk] path: {} ",path);
+
+                File dir = new File(UPLOAD_PATH);
+
+                if(!dir.exists()){
+                    dir.mkdir();
+                    path = Paths.get(dir.toString()+ "/"+file.getOriginalFilename());
+                    log.debug("[ksk] dir Create Complete: {}", path);
+
+                    isSuccess = fileWrite(path,bytes);
+
+                }else{
+                    isSuccess = fileWrite(path,bytes);
+                }
+
+                log.debug("[ksk] file write-end");
 
             } catch (Exception e) {
+                isSuccess = false;
                 e.printStackTrace();
+
+                return "template/failPage";
             }
         }else{
 
             return "template/failPage";
         }
 
-        template.setDate(calDate());
+        log.debug("[ksk] file Status: {}", isSuccess);
+
+        template.setDate(getCurrentDate());
 
         templateService.save(template);
         return "redirect:/template";
     }
 
-    public Date calDate(){
+    private boolean fileWrite(Path path, byte[] bytes) throws Exception{
+
+        File uploadFile = new File(path.toString());
+        boolean isSuccess = false;
+
+        BufferedOutputStream bo = new BufferedOutputStream(new FileOutputStream(uploadFile));
+
+        bo.write(bytes);
+        bo.close();
+        isSuccess = true;
+
+        log.debug("[ksk] file write complete");
+
+        return isSuccess;
+    }
+
+
+    private Date getCurrentDate(){
         return new Date();
     }
 
