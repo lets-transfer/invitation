@@ -50,17 +50,18 @@ public class TemplateController {
 
         String user = null;
         user = System.getProperty("user.home");
-        String UPLOAD_PATH = user + "/uploadTemplate/";
+        StringBuffer sb = new StringBuffer();
 
-        log.debug("[ksk] user path {} ", user);
+        String UPLOAD_PATH = sb.append(user).append("/").append(template.getName()).append("/").toString();
+
+        log.debug("[ksk] UPLOAD_PATH {} ", UPLOAD_PATH);
 
         if (file != null) {
             try {
 
-                log.debug("[ksk] file write-start");
                 bytes = file.getBytes();
 
-                Path path = Paths.get(UPLOAD_PATH + file.getOriginalFilename());
+                Path path = Paths.get(UPLOAD_PATH);
                 log.debug("[ksk] path: {} ", path);
 
                 File dir = new File(UPLOAD_PATH);
@@ -76,20 +77,20 @@ public class TemplateController {
                     isSuccess = fileWrite(path, bytes);
                 }
 
-                returnFailPage(isSuccess);
-                log.debug("[ksk] file write-end");
+                if (isSuccess == false) {
+                    return returnFailPage();
+                }
+
 
             } catch (Exception e) {
                 isSuccess = false;
                 e.printStackTrace();
 
-                returnFailPage(isSuccess);
+                return returnFailPage();
             }
         } else {
-            returnFailPage(isSuccess);
+            return returnFailPage();
         }
-
-        log.debug("[ksk] file Status: {}", isSuccess);
 
         template.setDate(getCurrentDate());
         template.setFilePath(UPLOAD_PATH);
@@ -98,26 +99,42 @@ public class TemplateController {
         return "redirect:/template";
     }
 
-    private String returnFailPage(boolean flag) {
-        return "template/failPage";
+    private void saveTemplate(Template template) {
+
     }
 
-    private boolean fileWrite(Path path, byte[] bytes) throws Exception {
+    private String returnFailPage() {
+
+        return "/template/failPage";
+
+    }
+
+    private boolean fileWrite(Path path, byte[] bytes) {
 
         File uploadFile = new File(path.toString());
+
+        log.debug("[ksk] fileWrite path: {}", path);
         boolean isSuccess = false;
+        BufferedOutputStream bo = null;
 
         if (uploadFile != null) {
 
-            BufferedOutputStream bo = new BufferedOutputStream(new FileOutputStream(uploadFile));
+            try {
+                bo = new BufferedOutputStream(new FileOutputStream(uploadFile));
+                bo.write(bytes);
+                bo.close();
 
-            bo.write(bytes);
-            bo.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
 
             log.debug("[ksk] file write complete");
             return true;
 
         } else {
+            log.debug("[ksk] file write fail");
+
             return false;
         }
 
