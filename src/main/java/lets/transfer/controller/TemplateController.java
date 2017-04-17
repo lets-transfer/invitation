@@ -92,6 +92,7 @@ public class TemplateController {
         log.debug("[ksk] file Status: {}", isSuccess);
 
         template.setDate(getCurrentDate());
+        template.setFilePath(UPLOAD_PATH);
 
         templateService.save(template);
         return "redirect:/template";
