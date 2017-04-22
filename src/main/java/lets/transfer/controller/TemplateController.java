@@ -1,7 +1,5 @@
 package lets.transfer.controller;
 
-import com.oracle.tools.packager.IOUtils;
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 import lets.transfer.domain.template.Template;
 import lets.transfer.domain.template.TemplateService;
 import lombok.extern.slf4j.Slf4j;
@@ -11,13 +9,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import sun.nio.ch.IOUtil;
 
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
@@ -65,7 +64,7 @@ public class TemplateController {
         if (file != null) {
             try {
 
-                Path path = Paths.get(UPLOAD_PATH + file.getOriginalFilename());
+                Path path = Paths.get(UPLOAD_PATH);
                 log.debug("[ksk] path: {} ", path);
 
                 File dir = new File(UPLOAD_PATH);
@@ -86,7 +85,6 @@ public class TemplateController {
 
 
             } catch (Exception e) {
-                isSuccess = false;
                 e.printStackTrace();
 
                 return returnFailPage();
@@ -115,7 +113,7 @@ public class TemplateController {
 
     private boolean fileWrite(MultipartFile file, Path path) {
 
-        File uploadFile = new File(path.toString());
+        File uploadFile = new File(path.toString() + "/" + file.getOriginalFilename());
 
         byte[] bytes = null;
 
@@ -159,12 +157,6 @@ public class TemplateController {
 
         log.debug("[ksk] file write complete");
         return true;
-    }
-
-    public void pipeToOfile(InputStream in, MultipartFile file) throws IOException {
-
-        byte[] buffer = new byte[file.getBytes().length];
-
     }
 
     private Date getCurrentDate() {
