@@ -129,31 +129,28 @@ public class TemplateController {
         try {
             bytes = file.getBytes();
             String fileType = file.getContentType();
-            log.debug("[ksk] file Type: {}", fileType);
+            log.debug("[ksk] file Type: {}, byte length: {}", fileType, bytes.length);
 
             if (fileType.contains("zip")) {
 
                 log.debug("[ksk] zip file write try");
 
-                ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(file.getBytes()));
+                ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(bytes));
                 ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(uploadFile));
-
-                bos = new BufferedOutputStream(zos);
 
                 int size;
                 while ((size = zis.read(bytes, 0, bytes.length)) != -1) {
-                    bos.write(bytes, 0, size);
+                    zos.write(bytes, 0, size);
                 }
 
                 zis.close();
+                zos.close();
 
             } else {
                 log.debug("[ksk] normal file");
                 bos = new BufferedOutputStream(new FileOutputStream(uploadFile));
                 bos.write(bytes);
             }
-
-            bos.close();
 
         } catch (Exception e) {
             e.printStackTrace();
