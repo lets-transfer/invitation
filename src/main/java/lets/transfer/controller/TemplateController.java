@@ -1,5 +1,7 @@
 package lets.transfer.controller;
 
+import com.oracle.tools.packager.IOUtils;
+import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 import lets.transfer.domain.template.Template;
 import lets.transfer.domain.template.TemplateService;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import sun.nio.ch.IOUtil;
 
 import java.io.*;
 import java.nio.file.Path;
@@ -16,6 +19,7 @@ import java.nio.file.Paths;
 import java.util.Date;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 @Slf4j
 @Controller
@@ -73,10 +77,10 @@ public class TemplateController {
                     path = Paths.get(dir.toString() + "/" + file.getOriginalFilename());
                     log.debug("[ksk] dir Create Complete: {}", path);
 
-                    isSuccess = fileWrite(file, path, bytes);
+                    isSuccess = fileWrite(file, path);
 
                 } else {
-                    isSuccess = fileWrite(file, path, bytes);
+                    isSuccess = fileWrite(file, path);
                 }
 
                 if (isSuccess == false) {
@@ -112,25 +116,29 @@ public class TemplateController {
 
     }
 
-    private boolean fileWrite(MultipartFile file, Path path, byte[] bytes) {
+    private boolean fileWrite(MultipartFile file, Path path) {
 
         File uploadFile = new File(path.toString());
 
-        log.debug("[ksk] fileWrite path: {}", path);
+        byte[] bytes = null;
+
+        log.debug("[ksk] uploadFile: {}", uploadFile.toString());
         BufferedOutputStream bos = null;
 
         if (uploadFile == null) {
             return false;
         }
-        try {
 
+        try {
+            bytes = file.getBytes();
             String fileType = file.getContentType();
             log.debug("[ksk] file Type: {}", fileType);
 
             if (fileType.contains("zip")) {
 
                 log.debug("[ksk] zip file write try");
-                ZipInputStream zis = new ZipInputStream(file.getInputStream());
+
+                ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(file.getBytes()));
 
                 ByteArrayOutputStream baos =
                         new ByteArrayOutputStream();
@@ -141,7 +149,10 @@ public class TemplateController {
                 while ((size = zis.read(bytes, 0, bytes.length)) != -1) {
                     bos.write(bytes, 0, size);
                 }
+
                 zis.close();
+
+
             } else {
                 log.debug("[ksk] normal file");
                 bos = new BufferedOutputStream(new FileOutputStream(uploadFile));
@@ -159,6 +170,11 @@ public class TemplateController {
         return true;
     }
 
+    public void pipeToOfile(InputStream in, MultipartFile file) throws IOException {
+
+        byte[] buffer = new byte[file.getBytes().length];
+
+    }
 
     private Date getCurrentDate() {
         return new Date();
