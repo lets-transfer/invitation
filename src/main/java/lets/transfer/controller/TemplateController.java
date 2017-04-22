@@ -14,6 +14,8 @@ import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 @Slf4j
 @Controller
@@ -71,10 +73,10 @@ public class TemplateController {
                     path = Paths.get(dir.toString() + "/" + file.getOriginalFilename());
                     log.debug("[ksk] dir Create Complete: {}", path);
 
-                    isSuccess = fileWrite(path, bytes);
+                    isSuccess = fileWrite(file, path, bytes);
 
                 } else {
-                    isSuccess = fileWrite(path, bytes);
+                    isSuccess = fileWrite(file, path, bytes);
                 }
 
                 if (isSuccess == false) {
@@ -110,35 +112,51 @@ public class TemplateController {
 
     }
 
-    private boolean fileWrite(Path path, byte[] bytes) {
+    private boolean fileWrite(MultipartFile file, Path path, byte[] bytes) {
 
         File uploadFile = new File(path.toString());
 
         log.debug("[ksk] fileWrite path: {}", path);
-        boolean isSuccess = false;
-        BufferedOutputStream bo = null;
+        BufferedOutputStream bos = null;
 
-        if (uploadFile != null) {
+        if (uploadFile == null) {
+            return false;
+        }
+        try {
 
-            try {
-                bo = new BufferedOutputStream(new FileOutputStream(uploadFile));
-                bo.write(bytes);
-                bo.close();
+            String fileType = file.getContentType();
+            log.debug("[ksk] file Type: {}", fileType);
 
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
+            if (fileType.contains("zip")) {
+
+                log.debug("[ksk] zip file write try");
+                ZipInputStream zis = new ZipInputStream(file.getInputStream());
+
+                ByteArrayOutputStream baos =
+                        new ByteArrayOutputStream();
+
+                bos = new BufferedOutputStream(new BufferedOutputStream(baos, bytes.length));
+
+                int size;
+                while ((size = zis.read(bytes, 0, bytes.length)) != -1) {
+                    bos.write(bytes, 0, size);
+                }
+                zis.close();
+            } else {
+                log.debug("[ksk] normal file");
+                bos = new BufferedOutputStream(new FileOutputStream(uploadFile));
+                bos.write(bytes);
             }
 
-            log.debug("[ksk] file write complete");
-            return true;
+            bos.close();
 
-        } else {
-            log.debug("[ksk] file write fail");
-
+        } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
 
+        log.debug("[ksk] file write complete");
+        return true;
     }
 
 
