@@ -65,16 +65,13 @@ public class TemplateController {
         if (file != null) {
             try {
 
-                bytes = file.getBytes();
-
-                Path path = Paths.get(UPLOAD_PATH);
+                Path path = Paths.get(UPLOAD_PATH + file.getOriginalFilename());
                 log.debug("[ksk] path: {} ", path);
 
                 File dir = new File(UPLOAD_PATH);
 
                 if (!dir.exists()) {
                     dir.mkdir();
-                    path = Paths.get(dir.toString() + "/" + file.getOriginalFilename());
                     log.debug("[ksk] dir Create Complete: {}", path);
 
                     isSuccess = fileWrite(file, path);
@@ -139,11 +136,9 @@ public class TemplateController {
                 log.debug("[ksk] zip file write try");
 
                 ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(file.getBytes()));
+                ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(uploadFile));
 
-                ByteArrayOutputStream baos =
-                        new ByteArrayOutputStream();
-
-                bos = new BufferedOutputStream(new BufferedOutputStream(baos, bytes.length));
+                bos = new BufferedOutputStream(zos);
 
                 int size;
                 while ((size = zis.read(bytes, 0, bytes.length)) != -1) {
@@ -151,7 +146,6 @@ public class TemplateController {
                 }
 
                 zis.close();
-
 
             } else {
                 log.debug("[ksk] normal file");
