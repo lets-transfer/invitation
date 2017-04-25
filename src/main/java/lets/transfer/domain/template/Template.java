@@ -17,4 +17,5 @@ public class Template {
 	private String filePath;
 	private String owner;
 	private Date date;
+	private boolean flag;
 }
