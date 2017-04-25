@@ -42,23 +42,19 @@ public class TemplateController {
                                @RequestParam(value = "file", required = false) MultipartFile file) {
 
         redirectAttributes.addFlashAttribute("result", "saved");
-
-
         template.setDate(getCurrentDate());
-
-        saveTemplate(template,file);
+        
+        if (saveTemplateService(template, file) == false) {
+            returnFailPage();
+        }
 
         return "redirect:/template";
     }
 
-    private void saveTemplate(Template template,MultipartFile file) {
-        template = templateService.save(template,file);
-
-        if(template.getflag() == false){
-            returnFailPage();
-        }
+    private boolean saveTemplateService(Template template, MultipartFile file) {
+        template = templateService.save(template, file);
+        return template.getflag();
     }
-
 
     private Date getCurrentDate() {
         return new Date();
