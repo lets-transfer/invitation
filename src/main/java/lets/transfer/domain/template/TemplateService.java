@@ -1,11 +1,10 @@
 package lets.transfer.domain.template;
 
-import lets.transfer.controller.TemplateController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
+import lombok.extern.slf4j.Slf4j;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -13,7 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-
+@Slf4j
 @Service
 @Transactional
 public class TemplateService {
@@ -40,19 +39,19 @@ public class TemplateService {
 
         String UPLOAD_PATH = sb.append(user).append("/").append(template.getName()).append("/").toString();
 
-//        log.debug("[ksk] UPLOAD_PATH {} ", UPLOAD_PATH);
+        log.debug("[ksk] UPLOAD_PATH {} ", UPLOAD_PATH);
 
         if (file != null) {
             try {
 
                 Path path = Paths.get(UPLOAD_PATH);
-//                log.debug("[ksk] path: {} ", path);
+                log.debug("[ksk] path: {} ", path);
 
                 File dir = new File(UPLOAD_PATH);
 
                 if (!dir.exists()) {
                     dir.mkdir();
-                    //log.debug("[ksk] dir Create Complete: {}", path);
+                    log.debug("[ksk] dir Create Complete: {}", path);
 
                     isSuccess = fileWrite(file, path);
 
@@ -94,7 +93,7 @@ public class TemplateService {
 
         byte[] bytes = null;
 
-//        log.debug("[ksk] uploadFile: {}", uploadFile.toString());
+        log.debug("[ksk] uploadFile: {}", uploadFile.toString());
         BufferedOutputStream bos = null;
 
         if (uploadFile == null) {
@@ -104,7 +103,7 @@ public class TemplateService {
         try {
             bytes = file.getBytes();
             String fileType = file.getContentType();
-//            log.debug("[ksk] file Type: {}, byte length: {}", fileType, bytes.length);
+            log.debug("[ksk] file Type: {}, byte length: {}", fileType, bytes.length);
 
 //            if (fileType.contains("zip")) {
 //
@@ -123,7 +122,7 @@ public class TemplateService {
 //                zos.close();
 //
 //            } else {
-//            log.debug("[ksk] normal file");
+            log.debug("[ksk] normal file");
             bos = new BufferedOutputStream(new FileOutputStream(uploadFile));
             bos.write(bytes);
 //            }
@@ -133,7 +132,7 @@ public class TemplateService {
             return false;
         }
 
-//        log.debug("[ksk] file write complete");
+        log.debug("[ksk] file write complete");
         return true;
     }
 }

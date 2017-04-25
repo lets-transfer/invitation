@@ -18,4 +18,8 @@ public class Template {
 	private String owner;
 	private Date date;
 	private boolean flag;
+
+	public boolean getflag(){
+		return flag;
+	}
 }

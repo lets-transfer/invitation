@@ -52,7 +52,11 @@ public class TemplateController {
     }
 
     private void saveTemplate(Template template,MultipartFile file) {
-        templateService.save(template,file);
+        template = templateService.save(template,file);
+
+        if(template.getflag() == false){
+            returnFailPage();
+        }
     }
 
 
