@@ -43,7 +43,7 @@ public class TemplateController {
 
         redirectAttributes.addFlashAttribute("result", "saved");
         template.setDate(getCurrentDate());
-        
+
         if (saveTemplateService(template, file) == false) {
             returnFailPage();
         }
