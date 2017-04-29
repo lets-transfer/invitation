@@ -36,12 +36,12 @@
   </tr>
 
   <!--/*@thymesVar id="members" type="java.util.List" */-->
-  <tr th:each="member : ${members}">
-    <!--/*@thymesVar id="member" type="lets.transfer.domain.team.Member"*/-->
-    <td th:text="${member.memberId}">ID</td>
-    <td th:text="${member.teamId.teamName}">TeamName</td>
-    <td th:text="${member.age}">Age</td>
-    <td th:text="${member.name}">Name</td>
+  <tr th:each="team : ${teams}">
+    <!--/*@thymesVar id="team" type="lets.transfer.domain.team.Team"*/-->
+    <td th:text="${team.teamId}">ID</td>
+    <td th:text="${team.teamName}">TeamName</td>
+    <td th:text="${team.members}">MemBers</td>
+
   </tr>
 </table>
 
