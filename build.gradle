@@ -100,7 +100,10 @@ dependencies {
 	// lombok
 	compile 'org.projectlombok:lombok:1.16.10'
 
+	compile 'javax.el:javax.el-api:2.2.4'
+
 	testCompile "junit:junit"
+	testCompile "org.springframework:spring-test:4.3.6.RELEASE"
 	testCompile spock
 }
 
