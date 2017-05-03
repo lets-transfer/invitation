@@ -4,28 +4,27 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Data
 public class Team {
-	@Id @GeneratedValue
-	private Long teamId;
+    @Id
+    @GeneratedValue
+    private Long teamId;
+    private String teamName;
 
-	@OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
-	private List<Member> members;
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
+    private List<Member> members;
 
-	private String teamName;
 }
 
 /**
- *
  * Team --> Member
- *
- *
- *
+ * <p>
+ * <p>
+ * <p>
  * Team Member
- *
+ * <p>
  * Team team = new Team();
  * team.
  */
