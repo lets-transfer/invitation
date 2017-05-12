@@ -49,44 +49,7 @@ public class MemberController {
         redirectAttributes.addFlashAttribute("result", "saved");
 
         List<Team> teams = teamService.getTeam();
-
-        String tName = member.getTname();
-
-        Team newTeam = null;
-
-        if (teams.isEmpty()) {
-            log.debug("[ksk] team DB is null");
-
-            newTeam = new Team();
-            newTeam.setTeamName(member.getTname());
-            member.setTeam(newTeam);
-            teamService.save(newTeam);
-
-        } else {
-            log.debug("[ksk] team DB is exist");
-
-            Team temp = null;
-            int checkTeam = 0;
-            for (Team t : teams) {
-                if (t.getTeamName().equals(tName)) {
-                    temp = t;
-                    checkTeam++;
-                }
-            }
-
-            if (checkTeam > 0) {
-                log.debug("[ksk] already team");
-                member.setTeam(temp);
-            } else {
-                log.debug("[ksk] no exist team");
-                newTeam = new Team();
-                newTeam.setTeamName(member.getTname());
-                teamService.save(newTeam);
-                member.setTeam(newTeam);
-            }
-        }
-
-        memberService.save(member);
+        memberService.save(member,teams);
         return "redirect:/member";
     }
 
