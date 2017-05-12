@@ -11,7 +11,9 @@ import javax.persistence.*;
 public class Member {
     @Id
     @GeneratedValue
+    @Column(name = "memberId")
     private long memberId;
+
     private int age;
     private String name;
     private String tname;
@@ -20,11 +22,11 @@ public class Member {
     @JoinColumn(name = "teamId")
     private Team team;
 
-    public void setTeam(String tName) {
-        if (tName != null) {
-            log.debug("[ksk] tName not null: {}" , tName);
-            this.team.setTeamName(tName);
-        }
+    public void setTeam(Team team) {
+        this.team = team;
+//        if(!team.getMembers().contains(this)){
+//            team.getMembers().add(this);
+//        }
+//
     }
-
 }

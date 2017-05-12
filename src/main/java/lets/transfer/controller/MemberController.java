@@ -3,6 +3,7 @@ package lets.transfer.controller;
 import lets.transfer.domain.team.Member;
 import lets.transfer.domain.team.MemberService;
 import lets.transfer.domain.team.Team;
+import lets.transfer.domain.team.TeamService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,16 +14,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 @Slf4j
 @Controller
 @RequestMapping("/member")
 public class MemberController {
     private final MemberService memberService;
+    private final TeamService teamService;
 
     @Autowired
-    public MemberController(MemberService memberService) {
+    public MemberController(MemberService memberService, TeamService teamService) {
 
         this.memberService = memberService;
+        this.teamService = teamService;
     }
 
     @RequestMapping("")
@@ -39,12 +44,47 @@ public class MemberController {
 
     @RequestMapping(value = "", method = RequestMethod.POST)
     public String saveMember(@ModelAttribute Member member,
-                             @ModelAttribute Team team,
-                               RedirectAttributes redirectAttributes) {
+                             RedirectAttributes redirectAttributes) {
 
         redirectAttributes.addFlashAttribute("result", "saved");
 
-        member.setTeam(member.getTname());
+        List<Team> teams = teamService.getTeam();
+
+        String tName = member.getTname();
+
+        Team newTeam = null;
+
+        if (teams.isEmpty()) {
+            log.debug("[ksk] team DB is null");
+
+            newTeam = new Team();
+            newTeam.setTeamName(member.getTname());
+            member.setTeam(newTeam);
+            teamService.save(newTeam);
+
+        } else {
+            log.debug("[ksk] team DB is exist");
+
+            Team temp = null;
+            int checkTeam = 0;
+            for (Team t : teams) {
+                if (t.getTeamName().equals(tName)) {
+                    temp = t;
+                    checkTeam++;
+                }
+            }
+
+            if (checkTeam > 0) {
+                log.debug("[ksk] already team");
+                member.setTeam(temp);
+            } else {
+                log.debug("[ksk] no exist team");
+                newTeam = new Team();
+                newTeam.setTeamName(member.getTname());
+                teamService.save(newTeam);
+                member.setTeam(newTeam);
+            }
+        }
 
         memberService.save(member);
         return "redirect:/member";
@@ -59,7 +99,9 @@ public class MemberController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public String deleteMember(@PathVariable long id, RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("result", "Deleted");
+
         memberService.remove(id);
-        return "redirect:/team";
+
+        return "redirect:/member";
     }
 }

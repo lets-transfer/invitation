@@ -21,16 +21,20 @@ public class TeamService {
     }
 
     public List<Team> list() {
-        return teamRepository.findAll();
+            return teamRepository.findAll();
     }
 
-    public Team save(Team team, MultipartFile file) {
+    public Team save(Team team) {
 
         return teamRepository.save(team);
     }
 
     public Team get(long id) {
         return teamRepository.findOne(id);
+    }
+
+    public List<Team> getTeam() {
+        return teamRepository.findAll();
     }
 
     public void remove(long id) {
