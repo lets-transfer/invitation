@@ -71,9 +71,10 @@ public class MemberService {
                 member.setTeam(temp);
             } else if (modifyId != 0) {
                 log.debug("[ksk] modify team name: " + temp.getTeamName() + " modify team: " + tName);
-                temp.setTeamName(tName);
-                saveTeam(temp);
-                member.setTeam(temp);
+                newTeam = new Team();
+                newTeam.setTeamName(tName);
+                saveTeam(newTeam);
+                member.setTeam(newTeam);
             } else {
                 log.debug("[ksk] no exist team");
                 newTeam = new Team();
