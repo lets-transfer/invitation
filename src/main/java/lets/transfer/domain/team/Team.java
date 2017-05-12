@@ -28,6 +28,18 @@ public class Team {
         }
     }
 
+    public boolean checkMember(long id){
+
+        boolean flag = false;
+        for (Member m : members) {
+            if (m.getMemberId() == id) {
+                flag = true;
+                break;
+            }
+        }
+        return flag;
+    }
+
     public long getMemberId(long id) {
 
         long mId = 0;

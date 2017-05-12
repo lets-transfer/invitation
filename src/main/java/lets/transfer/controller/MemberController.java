@@ -48,14 +48,14 @@ public class MemberController {
 
         redirectAttributes.addFlashAttribute("result", "saved");
 
-        List<Team> teams = teamService.getTeam();
-        memberService.save(member,teams);
+        memberService.save(member);
         return "redirect:/member";
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String editMember(@PathVariable long id, Model model) {
         model.addAttribute("member", memberService.get(id));
+        memberService.saveModifyID(id);
         return "team/insertEdit";
     }
 

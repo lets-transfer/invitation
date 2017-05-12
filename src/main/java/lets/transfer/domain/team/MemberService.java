@@ -13,11 +13,14 @@ import java.util.List;
 @Transactional
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final TeamRepository teamRepository;
     private TeamService teamService;
+    private long modifyId;
 
     @Autowired
-    public MemberService(MemberRepository memberRepository, TeamService teamService) {
+    public MemberService(MemberRepository memberRepository, TeamRepository teamRepository, TeamService teamService) {
         this.memberRepository = memberRepository;
+        this.teamRepository = teamRepository;
         this.teamService = teamService;
     }
 
@@ -25,12 +28,18 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
-    public Member save(Member member, List<Team> teams) {
+    public void saveModifyID(long id) {
+        modifyId = id;
+    }
+
+    public Member save(Member member) {
 
         String tName = member.getTname();
 
 
         Team newTeam = null;
+
+        List<Team> teams = teamRepository.findAll();
 
         if (teams.isEmpty()) {
             log.debug("[ksk] team DB is null");
@@ -50,10 +59,20 @@ public class MemberService {
                     temp = t;
                     checkTeam++;
                 }
+
+                if (t.checkMember(modifyId)) {
+                    log.debug("[ksk] modify team : " + modifyId);
+                    temp = t;
+                }
             }
 
             if (checkTeam > 0) {
                 log.debug("[ksk] already team");
+                member.setTeam(temp);
+            } else if (modifyId != 0) {
+                log.debug("[ksk] modify team name: " + temp.getTeamName() + " modify team: " + tName);
+                temp.setTeamName(tName);
+                saveTeam(temp);
                 member.setTeam(temp);
             } else {
                 log.debug("[ksk] no exist team");
