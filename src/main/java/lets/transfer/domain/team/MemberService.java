@@ -101,20 +101,29 @@ public class MemberService {
         Member member = memberRepository.findOne(id);
         Team team = null;
         teams = teamRepository.findAll();
+        List<Member> members = memberRepository.findAll();
 
-        int cnt = 0;
+        int tCnt = 0;
+        log.debug("[ksk] teams size " + teams.size());
         for (Team t : teams) {
             if (member.getTeam().getTeamName().equals(t.getTeamName())) {
                 team = t;
-                cnt++;
+                tCnt++;
             }
         }
 
-        log.debug("[ksk] team cnt :" + cnt + " team info: " + team.getTeamName());
+        int mCnt = 0;
+        for (Member m : members) {
+            if (m.getTeam().getTeamName().equals(team.getTeamName())) {
+                mCnt++;
+            }
+        }
+
+        log.debug("[ksk] team tCnt :" + tCnt + " team info: " + team.getTeamName() + " mem mCnt: " + mCnt);
 
         memberRepository.delete(id);
 
-        if (cnt < 2) {
+        if (tCnt < 2 && mCnt < 2) {
             log.debug("[ksk] team object delete");
             teamService.remove(team.getTeamId());
         }
