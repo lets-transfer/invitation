@@ -16,6 +16,7 @@ public class MemberService {
     private final TeamRepository teamRepository;
     private TeamService teamService;
     private long modifyId;
+    private List<Team> teams;
 
     @Autowired
     public MemberService(MemberRepository memberRepository, TeamRepository teamRepository, TeamService teamService) {
@@ -39,7 +40,7 @@ public class MemberService {
 
         Team newTeam = null;
 
-        List<Team> teams = teamRepository.findAll();
+        teams = teamRepository.findAll();
 
         if (teams.isEmpty()) {
             log.debug("[ksk] team DB is null");
@@ -96,7 +97,27 @@ public class MemberService {
     }
 
     public void remove(long id) {
+
+        Member member = memberRepository.findOne(id);
+        Team team = null;
+        teams = teamRepository.findAll();
+
+        int cnt = 0;
+        for (Team t : teams) {
+            if (member.getTeam().getTeamName().equals(t.getTeamName())) {
+                team = t;
+                cnt++;
+            }
+        }
+
+        log.debug("[ksk] team cnt :" + cnt + " team info: " + team.getTeamName());
+
         memberRepository.delete(id);
+
+        if (cnt < 2) {
+            log.debug("[ksk] team object delete");
+            teamService.remove(team.getTeamId());
+        }
     }
 
 
