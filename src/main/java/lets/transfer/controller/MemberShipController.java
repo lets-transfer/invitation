@@ -23,19 +23,19 @@ public class MemberShipController {
     private MemberShipService membershipservice;
 
     @Autowired
-    public MemberShipController(MemberShipService memberShipService) {
+    public MemberShipController(MemberShipService membershipservice) {
         this.membershipservice = membershipservice;
     }
 
     @RequestMapping("")
     public String viewMember(Model model) {
-        model.addAttribute("members", membershipservice.list());
+        model.addAttribute("membership", membershipservice.list());
         return "membership/memberShipList";
     }
 
     @RequestMapping(value = "/new", method = RequestMethod.GET)
     public String newMember(Model model) {
-        model.addAttribute("membership", new Member());
+        model.addAttribute("membership", new MemberShip());
         return "membership/insertEdit";
     }
 

@@ -1,7 +1,6 @@
 package lets.transfer.domain.team;
 
 import lombok.Data;
-import lombok.Generated;
 
 import javax.persistence.*;
 import java.util.ArrayList;
