@@ -7,11 +7,11 @@ import java.util.List;
 
 @Entity
 @Data
-public class Order {
+public class Orders {
     @Id
     @GeneratedValue
+    @Column(name = "ORDER_ID")
     private long id;
-    private int orderAmount;
 
     @ManyToOne
     @JoinColumn(name = "MEMBERSHIP_ID")
@@ -20,4 +20,6 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "PRODUCT_ID")
     private Product product;
+
+    private int orderAmount;
 }

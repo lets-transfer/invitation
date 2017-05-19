@@ -19,17 +19,17 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
-    public List<Order> list() {
+    public List<Orders> list() {
         return orderRepository.findAll();
     }
 
 
-    public Order save(Order order) {
+    public Orders save(Orders order) {
 
         return orderRepository.save(order);
     }
 
-    public Order get(long id) {
+    public Orders get(long id) {
         return orderRepository.findOne(id);
     }
 

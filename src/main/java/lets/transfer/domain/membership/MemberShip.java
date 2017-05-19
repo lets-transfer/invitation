@@ -3,6 +3,7 @@ package lets.transfer.domain.membership;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,6 +19,6 @@ public class MemberShip {
     private String phone;
 
     @OneToMany(mappedBy = "membership", cascade = CascadeType.ALL)
-    private List<Order> orders;
+    private List<Orders> orders = new ArrayList<>();
 
 }
