@@ -1,9 +1,9 @@
-package lets.transfer.domain.membership;
+package lets.transfer.domain.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface OrderRepository extends JpaRepository<Orders, Long>{
+public interface ProductRepository extends JpaRepository<Product, Long> {
 
 }

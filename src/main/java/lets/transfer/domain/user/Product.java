@@ -1,4 +1,4 @@
-package lets.transfer.domain.membership;
+package lets.transfer.domain.user;
 
 import lombok.Data;
 
@@ -14,5 +14,7 @@ public class Product {
     @GeneratedValue
     @Column(name = "PRODUCT_ID")
     private long id;
+    
     private String productName;
+    private int amount;
 }

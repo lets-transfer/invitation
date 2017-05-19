@@ -1,6 +1,5 @@
-package lets.transfer.domain.membership;
+package lets.transfer.domain.user;
 
-import com.sun.org.apache.xpath.internal.operations.Or;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

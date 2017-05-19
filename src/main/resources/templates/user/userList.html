@@ -39,16 +39,16 @@
         <th>Phone</th>
     </tr>
 
-    <!--/*@thymesVar id="memberships" type="java.util.List" */-->
-    <tr th:each="membership : ${memberships}">
+    <!--/*@thymesVar id="users" type="java.util.List" */-->
+    <tr th:each="user : ${users}">
         <!--/*@thymesVar id="member" type="lets.transfer.domain.team.Member"*/-->
-        <td th:text="${membership.id}">ID</td>
-        <td th:text="${membership.name}">ID</td>
-        <td th:text="${membership.address}">Address</td>
-        <td th:text="${membership.phone}">Phone</td>
-        <td><a href="insertEdit.html" th:href="@{'/membership/'+${membership.id}}">Edit</a></td>
+        <td th:text="${user.id}">ID</td>
+        <td th:text="${user.name}">ID</td>
+        <td th:text="${user.address}">Address</td>
+        <td th:text="${user.phone}">Phone</td>
+        <td><a href="insertEdit.html" th:href="@{'/user/'+${user.id}}">Edit</a></td>
         <td>
-            <form  th:action="@{'/membership/'+${membership.id}}"  method="post">
+            <form  th:action="@{'/user/'+${user.id}}"  method="post">
                 <button class="btn btn-danger" type="submit">Delete</button>
                 <input type="hidden" name="_method" value="delete" />
             </form>
@@ -56,7 +56,7 @@
     </tr>
 </table>
 
-<a class="btn btn-default" href="../team/insertEdit.html" th:href="@{/membership/new}">New</a>
+<a class="btn btn-default" href="../team/insertEdit.html" th:href="@{/user/new}">New</a>
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

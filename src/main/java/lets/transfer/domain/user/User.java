@@ -1,4 +1,4 @@
-package lets.transfer.domain.membership;
+package lets.transfer.domain.user;
 
 import lombok.Data;
 
@@ -8,17 +8,23 @@ import java.util.List;
 
 @Entity
 @Data
-public class MemberShip {
+public class User {
     @Id
     @GeneratedValue
-    @Column(name = "MEMBERSHIP_ID")
+    @Column(name = "USER_ID")
     private long id;
 
     private String name;
     private String address;
     private String phone;
 
-    @OneToMany(mappedBy = "membership", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Orders> orders = new ArrayList<>();
+
+    public void setProduct(String product){
+        for(Orders order : orders){
+
+        }
+    }
 
 }

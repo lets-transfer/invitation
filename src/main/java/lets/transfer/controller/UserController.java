@@ -1,10 +1,8 @@
 package lets.transfer.controller;
 
-import lets.transfer.domain.membership.MemberShip;
-import lets.transfer.domain.membership.MemberShipService;
-import lets.transfer.domain.team.Member;
-import lets.transfer.domain.team.MemberService;
-import lets.transfer.domain.team.TeamService;
+import lets.transfer.domain.user.User;
+import lets.transfer.domain.user.UserDto;
+import lets.transfer.domain.user.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,47 +15,47 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Slf4j
 @Controller
-@RequestMapping("/membership")
-public class MemberShipController {
+@RequestMapping("/user")
+public class UserController {
 
-    private MemberShipService membershipservice;
+    private UserService userService;
 
     @Autowired
-    public MemberShipController(MemberShipService membershipservice) {
-        this.membershipservice = membershipservice;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @RequestMapping("")
     public String viewMember(Model model) {
-        model.addAttribute("membership", membershipservice.list());
-        return "membership/memberShipList";
+        model.addAttribute("user", userService.list());
+        return "user/userList";
     }
 
     @RequestMapping(value = "/new", method = RequestMethod.GET)
     public String newMember(Model model) {
-        model.addAttribute("membership", new MemberShip());
-        return "membership/insertEdit";
+        model.addAttribute("user", new User());
+        return "user/insertEdit";
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public String saveMember(@ModelAttribute MemberShip membership,
+    public String saveMember(@ModelAttribute UserDto userDto,
                              RedirectAttributes redirectAttributes) {
 
         redirectAttributes.addFlashAttribute("result", "saved");
-        membershipservice.save(membership);
-        return "redirect:/membership";
+        userService.save(userDto);
+        return "redirect:/user";
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String editMember(@PathVariable long id, Model model) {
-        model.addAttribute("membership", membershipservice.get(id));
-        return "membership/insertEdit";
+        model.addAttribute("user", userService.get(id));
+        return "user/insertEdit";
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public String deleteMember(@PathVariable long id, RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("result", "Deleted");
-        membershipservice.remove(id);
-        return "redirect:/membership";
+        userService.remove(id);
+        return "redirect:/user";
     }
 }
