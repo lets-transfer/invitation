@@ -35,20 +35,24 @@
     <tr>
         <th>MemberId</th>
         <th>Name</th>
-        <th>Address</th>
         <th>Phone</th>
+        <th>Address</th>
+        <th>Product</th>
+        <th>Amount</th>
     </tr>
 
-    <!--/*@thymesVar id="users" type="java.util.List" */-->
-    <tr th:each="user : ${users}">
+    <!--/*@thymesVar id="orders" type="java.util.List" */-->
+    <tr th:each="order : ${orders}">
         <!--/*@thymesVar id="member" type="lets.transfer.domain.team.Member"*/-->
-        <td th:text="${user.id}">ID</td>
-        <td th:text="${user.name}">ID</td>
-        <td th:text="${user.address}">Address</td>
-        <td th:text="${user.phone}">Phone</td>
-        <td><a href="insertEdit.html" th:href="@{'/user/'+${user.id}}">Edit</a></td>
+        <td th:text="${order.user.id}">MemberId</td>
+        <td th:text="${order.user.name}">Name</td>
+        <td th:text="${order.user.phone}">Phone</td>
+        <td th:text="${order.user.address}">Address</td>
+        <td th:text="${order.product.productName}">Product</td>
+        <td th:text="${order.orderAmount}">Amount</td>
+        <td><a href="insertEdit.html" th:href="@{'/user/'+${order.user.id}}">Edit</a></td>
         <td>
-            <form  th:action="@{'/user/'+${user.id}}"  method="post">
+            <form  th:action="@{'/user/'+${order.user.id}}"  method="post">
                 <button class="btn btn-danger" type="submit">Delete</button>
                 <input type="hidden" name="_method" value="delete" />
             </form>

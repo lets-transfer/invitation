@@ -27,13 +27,13 @@ public class UserController {
 
     @RequestMapping("")
     public String viewMember(Model model) {
-        model.addAttribute("user", userService.list());
+        model.addAttribute("orders", userService.list());
         return "user/userList";
     }
 
     @RequestMapping(value = "/new", method = RequestMethod.GET)
     public String newMember(Model model) {
-        model.addAttribute("user", new User());
+        model.addAttribute("userDto", new UserDto());
         return "user/insertEdit";
     }
 

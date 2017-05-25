@@ -22,10 +22,6 @@ public class Orders {
 
     private int orderAmount;
 
-    public void setProduct(String product) {
-        this.product.setProductName(product);
-    }
-
     public void setOrderAmount(int amount) {
         this.orderAmount = amount;
     }
