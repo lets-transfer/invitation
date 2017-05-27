@@ -19,10 +19,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class UserController {
 
     private UserService userService;
+    private UserDto userDto;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserDto userDto) {
         this.userService = userService;
+        this.userDto = userDto;
     }
 
     @RequestMapping("")
@@ -48,7 +50,8 @@ public class UserController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String editMember(@PathVariable long id, Model model) {
-        model.addAttribute("user", userService.get(id));
+        //model.addAttribute("user", userService.get(id));
+        model.addAttribute("userDto", userDto);
         return "user/insertEdit";
     }
 

@@ -2,9 +2,11 @@ package lets.transfer.domain.user;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.jaxb.SpringDataJaxb;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.Order;
 import java.util.List;
 
 @Slf4j
@@ -48,18 +50,49 @@ public class UserService {
             order.setUser(user);
             orderRepository.save(order);
         }
-
         productRepository.save(product);
-//        return user;
     }
 
     public User get(long id) {
         return userRepository.findOne(id);
     }
 
+    public UserDto getUserDto(long id,UserDto userDto) {
+
+        if(userDto.getId() == id){
+            log.debug("ok");
+        }
+
+        return userDto;
+    }
+
     public void remove(long id) {
+
+        List<Orders> orders = orderRepository.findAll();
+
+        Orders orderTemp = null;
+
+        for (Orders order : orders) {
+            if (order.getUser().getId() == id) {
+                orderTemp = order;
+                break;
+            }
+        }
+
+        productRepository.delete(orderTemp.getProduct().getId());
         userRepository.delete(id);
     }
 
+    public Orders getOrderByUser(long UserId) {
+        List<Orders> orders = orderRepository.findAll();
+        Orders orderTemp = null;
 
+        for (Orders order : orders) {
+            if (order.getUser().getId() == UserId) {
+                orderTemp = order;
+                break;
+            }
+        }
+        return orderTemp;
+    }
 }
